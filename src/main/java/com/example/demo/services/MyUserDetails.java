@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,6 +23,9 @@ public class MyUserDetails implements UserDetails{
     private boolean active;
     private List<GrantedAuthority> authorities;
 	
+    @Autowired
+    private UserRolesServiceImp userRolesService; // Inject the UserService
+    
 	public MyUserDetails(String name) {
 		this.username = name;
 	}
@@ -43,8 +47,7 @@ public class MyUserDetails implements UserDetails{
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		// TODO Auto-generated method stub
-		return this.authorities;
+        return this.authorities;
 	}
 
 	@Override

@@ -29,12 +29,12 @@ import javax.persistence.JoinColumn;
 public class User implements UserDetails{
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String userName;
     private String password;
     private boolean active;
-    @OneToMany(mappedBy = "role", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<UserRoles> userRoles = new HashSet<>();
 
     

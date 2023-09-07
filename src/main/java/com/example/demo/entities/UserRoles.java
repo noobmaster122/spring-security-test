@@ -12,7 +12,7 @@ import javax.persistence.Table;
 @Table(name = "users_roles")
 public class UserRoles {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @ManyToOne
