@@ -2,6 +2,7 @@ package com.example.demo.controllers;
 
 import com.example.demo.entities.*;
 
+
 import javax.servlet.ServletException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.entities.User;
 import com.example.demo.interfaces.UserRolesService;
+import com.example.demo.jwt.JwtGenerator;
 import com.example.demo.services.UserRegistrationService;
 import com.example.demo.services.UserRolesServiceImp;
 
@@ -28,36 +30,27 @@ import org.springframework.security.authentication.AuthenticationManager;
 @RestController
 public class LoginController {
 
-	//@Autowired
-	//UserRolesServiceImp userRolesService;
 	@Autowired
 	UserRolesServiceImp userRolesService;
-	
 	@Autowired
 	UserRegistrationService userRegistrationService;
+	@Autowired
+    private AuthenticationManager authenticationManager;
+	@Autowired
+	private JwtGenerator jwtGenerator;
+
 	
 	@PostMapping("/api/public/login")
 	public ResponseEntity<String> authenticateUser(@RequestBody User user, HttpServletRequest request) {
 
-		try {
-			request.login(user.getUserName(), user.getPassword());
-			System.out.println("je suis la " );
-			System.out.println("user name : " + user.getUserName() + " user password: " + user.getPassword());
-		    
-			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-			if( authentication.isAuthenticated() ) {
-		        Object principal = authentication.getPrincipal();
-		        if (principal instanceof User) {
-		        User x = (User) principal;
-				System.out.println("connected user: " +  x.getUsername());
-		        }
-
-			}
-		} catch (ServletException e) {
-			e.printStackTrace();
-		}
-
-		return new ResponseEntity<>("User signed-in successfully!.", HttpStatus.OK);
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                user.getUsername(),
+                user.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String token = jwtGenerator.generateToken(authentication);
+        //System.out.println("this is token: " + token);
+        return new ResponseEntity<>(token, HttpStatus.OK);
 	}
 
 	@GetMapping("/api/public/logout")

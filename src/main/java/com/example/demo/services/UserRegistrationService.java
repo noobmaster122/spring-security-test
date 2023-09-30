@@ -22,12 +22,10 @@ public class UserRegistrationService {
 	@Autowired
 	UserRoleRepository userRoleRepo;
 	
-	@Transactional
 	public void saveNewUser(User newUser) {
 		userRepo.save(newUser);
 	}
 	
-	@Transactional
 	public void saveNewUserRole(UserRoles userRole) {
 		userRoleRepo.save(userRole);
 	}

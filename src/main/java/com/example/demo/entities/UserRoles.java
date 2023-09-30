@@ -13,7 +13,7 @@ import javax.persistence.Table;
 public class UserRoles {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @ManyToOne
     private User user;
@@ -22,12 +22,12 @@ public class UserRoles {
     private Role role;
     
  
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 	
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
