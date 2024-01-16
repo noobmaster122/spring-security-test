@@ -20,8 +20,16 @@ import com.example.demo.repositories.UserRoleRepository;
 @DependsOn("userRepository")
 public class CustomUserDetailsService implements UserDetailsService{
 	
-	@Autowired
+	//@Autowired
 	private UserRepository userRepo;
+	
+	
+	
+	@Autowired
+	public CustomUserDetailsService(UserRepository userRepo) {
+		this.userRepo = userRepo;
+	}
+	
 
 	@Override
 	@Transactional

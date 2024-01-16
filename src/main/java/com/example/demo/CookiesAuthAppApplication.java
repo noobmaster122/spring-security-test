@@ -20,8 +20,6 @@ public class CookiesAuthAppApplication implements CommandLineRunner {
 
 	   @Autowired
 	    private ApplicationContext appContext;
-//	   @Autowired
-//	   private TestDI testdi;
 	   
 	public static void main(String[] args) {
 		SpringApplication.run(CookiesAuthAppApplication.class, args);

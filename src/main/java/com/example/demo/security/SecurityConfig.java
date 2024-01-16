@@ -30,11 +30,18 @@ public class SecurityConfig {
 
     private JwtAuthEntryPoint authEntryPoint;
     private CustomUserDetailsService userDetailsService;
+    private CustomUserDetailsService customUserDetailsService;
+    private JwtAuthFilter jwtAuthFilter;
     
     @Autowired
-    public SecurityConfig(CustomUserDetailsService userDetailsService, JwtAuthEntryPoint authEntryPoint) {
+    public SecurityConfig(CustomUserDetailsService userDetailsService,
+    						JwtAuthEntryPoint authEntryPoint,
+    						CustomUserDetailsService customUserDetailsService,
+    						JwtAuthFilter jwtAuthFilter) {
         this.userDetailsService = userDetailsService;
         this.authEntryPoint = authEntryPoint;
+        this.customUserDetailsService = customUserDetailsService;
+        this.jwtAuthFilter = jwtAuthFilter;
     }
 
     @Bean
@@ -47,7 +54,7 @@ public class SecurityConfig {
         .sessionManagement()
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
-        .addFilterAfter(new JwtAuthFilter(new JwtGenerator(), new CustomUserDetailsService()), UsernamePasswordAuthenticationFilter.class)
+        .addFilterAfter(new JwtAuthFilter(new JwtGenerator(), this.customUserDetailsService), UsernamePasswordAuthenticationFilter.class)
         .authorizeRequests()
         .antMatchers("/api/public/**").permitAll() // Allow access to public endpoints
         .anyRequest().authenticated() // Requires authentication for other endpoints
@@ -72,7 +79,7 @@ public class SecurityConfig {
     
     @Bean
     public JwtAuthFilter jwtAuthenticationFilter() {
-    	return new JwtAuthFilter();
+    	return this.jwtAuthFilter;
     }
    
 
